@@ -89,16 +89,70 @@ window.countNRooksSolutions = function(n) {
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
-  var solution = undefined; //fixme
+  /*
+  var board = new Board({n:n});
 
-  console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
-  return solution;
+  for (var col = 0; col < n; col++) {
+    for (var row = 0; row < n; row++) {
+      board.togglePiece(row, col);
+      if (board.hasAnyQueensConflicts()) {
+        board.togglePiece(row, col);
+      }
+    }
+  }
+  console.log('Single solution for ' + n + ' queens:', JSON.stringify(board.rows()));
+  return board.rows();
+  */
+  
+
+  var solutions = [];
+  var board = new Board({n:n});
+
+  var fillSolution = function(rows, currentBoard) {
+    if (rows === n) {
+      solutions.push(currentBoard);
+      return;
+    }
+    for (var col = 0; col < n; col++) {
+      currentBoard.togglePiece(rows, col);
+      if (!currentBoard.hasAnyQueensConflicts()) {
+        fillSolution(rows+1, currentBoard);
+      }
+      currentBoard.togglePiece(rows, col);
+    }
+  }
+
+  fillSolution(0, board);
+  console.log(solutions);
+  return solutions[0];
 };
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  var solutions = [];
+  var board = new Board({n:n});
 
-  console.log('Number of solutions for ' + n + ' queens:', solutionCount);
-  return solutionCount;
+  var fillSolution = function(rows, currentBoard) {
+    if (rows === n) {
+      solutions.push(currentBoard);
+      return;
+    }
+    for (var col = 0; col < n; col++) {
+      currentBoard.togglePiece(rows, col);
+      if (!currentBoard.hasAnyQueensConflicts()) {
+        fillSolution(rows+1, currentBoard);
+      }
+      currentBoard.togglePiece(rows, col);
+    }
+  }
+
+  fillSolution(0, board);
+  return solutions.length;
 };
+
+
+
+
+
+
+
